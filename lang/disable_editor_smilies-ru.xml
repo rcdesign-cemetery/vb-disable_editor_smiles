@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<language name="Russian (RU)" vbversion="3.8.4" product="disable_editor_smilies" type="phrases">
+	<phrasetype name="User Tools (global)" fieldname="user">
+		<phrase name="des_smilies_disable" date="1271962878" username="Vitaly"><![CDATA[Отключить панель смайликов в редакторе]]></phrase>
+		<phrase name="des_smilies_disable_desc" date="1271963870" username="Vitaly"><![CDATA[Вы можете скрыть панель смайликов в редакторе для экономии места. Смайлики все равно будут доступны из выпадающего меню.]]></phrase>
+	</phrasetype>
+</language>

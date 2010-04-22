@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="disable_editor_smilies" active="1">
+	<title>Disable smilies in editor</title>
+	<description />
+	<version>0.1</version>
+	<url />
+	<versioncheckurl />
+	<apm_releasedate>0</apm_releasedate>
+	<apm_author />
+	<apm_relatedurl />
+	<apm_extrainfo />
+	<apm_extraedit />
+	<dependencies>
+	</dependencies>
+	<codes>
+		<code version="0.1">
+			<installcode><![CDATA[
+                $db->hide_errors();
+                $db->query_write("ALTER TABLE `" . TABLE_PREFIX . "user` ADD `disablededitorsmilies` INT UNSIGNED NOT NULL DEFAULT '0'");
+                $db->show_errors();
+                
+            ]]></installcode>
+			<uninstallcode><![CDATA[
+                $db->hide_errors();
+                $db->query_write("ALTER TABLE `" . TABLE_PREFIX . "user` DROP `disablededitorsmilies`");
+                $db->show_errors();
+                
+            ]]></uninstallcode>
+		</code>
+	</codes>
+	<templates>
+		<template name="des_profile_option" templatetype="template" date="1258983509" username="e.shkuropat" version=""><![CDATA[
+                    <tr>
+                        <td>
+                            <br />
+                            $vbphrase[des_smilies_disable_desc]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="cb_disable_editor_smilies"><input type="checkbox" name="disable_editor_smilies" value="1" id="disable_editor_smilies" $checked[disablededitorsmilies] />$vbphrase[des_smilies_disable]</label></td>
+                    </tr>
+        ]]></template>
+	</templates>
+	<plugins>
+		<plugin active="1" executionorder="5">
+			<title>Cache templates</title>
+			<hookname>cache_templates</hookname>
+			<phpcode><![CDATA[
+if (in_array('modifyoptions', $globaltemplates))
+{
+    $globaltemplates[] = 'des_profile_option';
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Disable smilies in editor</title>
+			<hookname>editor_toolbar_end</hookname>
+			<phpcode><![CDATA[
+if ($vbulletin->userinfo['disablededitorsmilies'])
+{
+    $smiliebox = '';
+}
+
+]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Modify profile options page template</title>
+			<hookname>parse_templates</hookname>
+			<phpcode><![CDATA[
+if (array_key_exists('modifyoptions',$vbulletin->templatecache))
+{
+        $pattern = '						<label for=\"sel_showvbcode\">$vbphrase[message_editor_interface]:</label>
+					</td>
+				</tr>';
+
+        $repl = $pattern . fetch_template('des_profile_option');
+        $vbulletin->templatecache['modifyoptions'] = str_replace($pattern, $repl, $vbulletin->templatecache['modifyoptions']);
+}
+
+]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Save option</title>
+			<hookname>profile_updateoptions</hookname>
+			<phpcode><![CDATA[
+$vbulletin->input->clean_gpc('p', 'disable_editor_smilies', TYPE_INT);
+$userdata->set('disablededitorsmilies', $vbulletin->GPC['disable_editor_smilies']);
+            ]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Add option to user DM</title>
+			<hookname>userdata_start</hookname>
+			<phpcode><![CDATA[
+$this->validfields['disablededitorsmilies'] = array(TYPE_UINT,       REQ_NO);
+            ]]></phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+		<phrasetype name="User Tools (global)" fieldname="user">
+			<phrase name="des_smilies_disable" date="1271962878" username="Vitaly" version=""><![CDATA[Disable smilies panel in editor]]></phrase>
+			<phrase name="des_smilies_disable_desc" date="1271963870" username="Vitaly" version=""><![CDATA[You can hide smiles panel in editor, to save space. Smiles still will be available from dropdown menu.]]></phrase>
+		</phrasetype>
+	</phrases>
+	<options>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+	<templateedits>
+	</templateedits>
+</product>
