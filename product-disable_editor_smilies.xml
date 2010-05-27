@@ -4,8 +4,8 @@
 	<title>Disable smilies in editor</title>
 	<description />
 	<version>0.2</version>
-	<url />
-	<versioncheckurl />
+	<url><![CDATA[http://www.vbulletin.org/forum/misc.php?do=producthelp&pid=disable_editor_smilies]]></url>
+	<versioncheckurl><![CDATA[http://www.vbulletin.org/forum/misc.php?do=productcheck&pid=disable_editor_smilies]]></versioncheckurl>
 	<apm_releasedate></apm_releasedate>
 	<apm_author></apm_author>
 	<apm_relatedurl></apm_relatedurl>
@@ -24,9 +24,7 @@ $db->show_errors();]]></uninstallcode>
 		</code>
 	</codes>
 	<templates>
-		<template name="des_profile_option" templatetype="template" date="1272193184" username="sawoy" version="0.2"><![CDATA[</div>
-<div class="blockrow">
-  <ul class="checkradio group rightcol">
+		<template name="des_profile_option" templatetype="template" date="1274974479" username="Vitaly" version="0.2"><![CDATA[  <ul class="checkradio group rightcol">
     <li>
       <label for="cb_disable_editor_smilies">
         <input type="checkbox" name="disable_editor_smilies" value="1" id="cb_disable_editor_smilies" {vb:raw disable_editor_smilies_checked} /> {vb:phrase des_smilies_disable}
