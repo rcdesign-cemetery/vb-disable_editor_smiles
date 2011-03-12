@@ -3,14 +3,14 @@
 <product productid="disable_editor_smilies" active="1">
 	<title>Disable smilies in editor</title>
 	<description />
-	<version>0.2</version>
+	<version>0.3</version>
 	<url><![CDATA[http://www.vbulletin.org/forum/misc.php?do=producthelp&pid=disable_editor_smilies]]></url>
 	<versioncheckurl><![CDATA[http://www.vbulletin.org/forum/misc.php?do=productcheck&pid=disable_editor_smilies]]></versioncheckurl>
-	<apm_releasedate></apm_releasedate>
-	<apm_author></apm_author>
-	<apm_relatedurl></apm_relatedurl>
-	<apm_extrainfo></apm_extrainfo>
-	<apm_extraedit></apm_extraedit>
+	<apm_releasedate>0</apm_releasedate>
+	<apm_author />
+	<apm_relatedurl />
+	<apm_extrainfo />
+	<apm_extraedit />
 	<dependencies>
 	</dependencies>
 	<codes>
@@ -65,7 +65,24 @@ $db->show_errors();]]></uninstallcode>
         // include out template into current page
         $pattern = '<p class="description">\' . vB_Template_Runtime::parsePhrase("entering_message_three_interface") . \'</p>';
         $replace = $pattern . vB_Template::fetch_template_raw( 'des_profile_option' );
+
+        $before_patch = $vbulletin->templatecache['modifyoptions'];
         $vbulletin->templatecache['modifyoptions'] = str_replace( $pattern, $replace, $vbulletin->templatecache['modifyoptions'] );
+        if ($before_patch == $vbulletin->templatecache['modifyoptions'])
+        {
+            $err_message = sprintf("Product '%s', error in hook %s : can't modify template '%s'",
+                                'Disable smilies in editor',
+                                'profile_complete',
+                                'modifyoptions');
+            error_log($err_message); // Send to PHP error log
+            if ($vbulletin->debug)
+            {
+                trigger_error($err_message, E_USER_WARNING); // Display on page
+                require_once(DIR . '/includes/functions_log_error.php');
+                log_vbulletin_error($err_message, 'php'); // Send to vB error log
+            }
+            unset($err_message, $before_patch);
+        }
 
         // register variables used by our template
         $o_checked = $vbulletin->userinfo['disablededitorsmilies'] ? 'checked="checked"' : '';
